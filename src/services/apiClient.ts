@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken } from "@/utils/token"; 
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://nextendeavor-backend.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },

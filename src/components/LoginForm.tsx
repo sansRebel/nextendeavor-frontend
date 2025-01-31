@@ -1,23 +1,34 @@
-// src/components/LoginForm.tsx
 "use client";
 
 import { useState } from "react";
+import { login } from "@/services/authService";
 
-const LoginForm = () => {
+interface LoginFormProps {
+  onAuthSuccess: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onAuthSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Logging in with:", email, password);
-    // Authentication logic will be added later
+    setError("");
+
+    try {
+      await login(email, password);
+      onAuthSuccess(); // Call auth success handler
+    } catch  {
+      setError("Invalid email or password.");
+    }
   };
 
   return (
     <div className="bg-base-200 p-6 rounded-lg shadow-lg w-full max-w-md">
       <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
+      {error && <p className="text-red-500 text-center">{error}</p>}
       <form onSubmit={handleLogin} className="flex flex-col gap-4">
-        {/* Email */}
         <input
           type="email"
           placeholder="Email"
@@ -26,7 +37,6 @@ const LoginForm = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        {/* Password */}
         <input
           type="password"
           placeholder="Password"
@@ -35,10 +45,7 @@ const LoginForm = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {/* Submit Button */}
-        <button type="submit" className="btn btn-primary w-full">
-          Login
-        </button>
+        <button type="submit" className="btn btn-primary w-full">Login</button>
       </form>
     </div>
   );
