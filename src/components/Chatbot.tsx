@@ -1,26 +1,40 @@
-// src/components/ChatbotSection.tsx
 "use client";
 
 import { useState } from "react";
+import { sendMessageToDialogflow } from "@/services/recServices"; // Import the service
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
     { type: "bot", text: "Hello! How can I assist you with your career journey?" },
   ]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!input.trim()) return;
 
-    // Add user message
+    // Add user message to the chat
     const newMessages = [...messages, { type: "user", text: input }];
     setMessages(newMessages);
     setInput("");
+    setLoading(true);
 
-    // Placeholder response (AI integration will be added later)
-    setTimeout(() => {
-      setMessages([...newMessages, { type: "bot", text: "This is a placeholder response." }]);
-    }, 1000);
+    // Get AI response from Dialogflow
+    const { text } = await sendMessageToDialogflow(input);
+
+    // Format bot response
+    const botReply = text || "I'm not sure how to respond to that.";
+
+
+
+    // Add bot response to the messages list
+    setMessages((prevMessages) => [
+      ...prevMessages, // Preserve all previous messages
+      { type: "bot", text: botReply } // Add AI response
+    ]);
+    
+    
+    setLoading(false);
   };
 
   return (
@@ -36,6 +50,7 @@ const Chatbot = () => {
                 <div className="chat-bubble">{msg.text}</div>
               </div>
             ))}
+            {loading && <div className="chat chat-start"><div className="chat-bubble">Thinking...</div></div>}
           </div>
 
           {/* Input Field */}
@@ -47,8 +62,9 @@ const Chatbot = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+              disabled={loading}
             />
-            <button className="btn btn-primary ml-2" onClick={handleSendMessage}>
+            <button className="btn btn-primary ml-2" onClick={handleSendMessage} disabled={loading}>
               Send
             </button>
           </div>

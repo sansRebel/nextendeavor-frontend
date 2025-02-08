@@ -9,8 +9,15 @@ export interface AuthResponse{
     user: User;
 };
 
-export interface Recommendation{
+export interface Recommendation {
     id: string;
-    name: string;
+    title: string; 
     description: string;
+    requiredSkills: string[];
+    industry: string | null;
+    demand: number | null;
+    growthPotential: number | null;
+    salaryMin?: number | null;
+    salaryMax?: number | null;
+    totalScore: number;
 }
