@@ -25,19 +25,25 @@ export const sendMessageToDialogflow = async (message: string) => {
 
   
 
-export const fetchRecommendation = async (): Promise<Recommendation[]> => {
-    const res = await apiClient.get<Recommendation[]>("/recommendations/saved");
-    return res.data;
-}
-
-export const saveRecommendation = async(recommendationId: string) => {
-    const res = await apiClient.post("/recommendations/save", { id: recommendationId });
-    return res.data
-
-}
+export const fetchSavedRecommendations = async (): Promise<Recommendation[]> => {
+  const res = await apiClient.get<{ recommendations: Recommendation[] }>("/api/recommendations/saved");
+  return res.data.recommendations; 
+};
 
 
-export const deleteRecommendations = async () => {
-    await apiClient.delete("recommendations/clear");
+export const saveRecommendation = async(careerId: string) => {
+  try {
+    const res = await apiClient.post("/api/recommendations/save", { careerId });
+
+    return res.data; 
+  } catch (error) {
+    console.error("Failed to save recommendation:", error);
+    throw error; 
+  }
+};
+
+
+export const clearSavedRecommendations = async () => {
+    await apiClient.delete("/api/recommendations/clear");
 }
 

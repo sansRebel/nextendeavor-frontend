@@ -4,7 +4,7 @@ import { useState } from "react";
 import { login } from "@/services/authService";
 
 interface LoginFormProps {
-  onAuthSuccess: () => void;
+  onAuthSuccess: () => void; // ✅ Ensure prop is defined
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onAuthSuccess }) => {
@@ -18,8 +18,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onAuthSuccess }) => {
 
     try {
       await login(email, password);
-      onAuthSuccess(); // Call auth success handler
-    } catch  {
+      onAuthSuccess(); // ✅ Trigger success callback after login
+    } catch {
       setError("Invalid email or password.");
     }
   };
@@ -29,22 +29,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onAuthSuccess }) => {
       <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
       {error && <p className="text-red-500 text-center">{error}</p>}
       <form onSubmit={handleLogin} className="flex flex-col gap-4">
-        <input
-          type="email"
-          placeholder="Email"
-          className="input input-bordered w-full"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="input input-bordered w-full"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <input type="email" placeholder="Email" className="input input-bordered w-full" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Password" className="input input-bordered w-full" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit" className="btn btn-primary w-full">Login</button>
       </form>
     </div>

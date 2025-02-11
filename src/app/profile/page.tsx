@@ -10,6 +10,7 @@ const ProfilePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
+
   useEffect(() => {
     if (getUserFromToken()) {
       setIsAuthenticated(true);
@@ -21,8 +22,10 @@ const ProfilePage = () => {
   };
 
   const switchToLogin = () => {
-    setShowSignup(false); // Switch to login form
+    setShowSignup(false);
   };
+
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6">

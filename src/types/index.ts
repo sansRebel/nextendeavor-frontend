@@ -20,4 +20,5 @@ export interface Recommendation {
     salaryMin?: number | null;
     salaryMax?: number | null;
     totalScore: number;
+    savedAt: Date;
 }
