@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Chatbot from "@/components/Chatbot";
 import Hero from "@/components/Hero";
-import WhyNextEndeavor from "@/components/WhyNextCards";
+import FeatureShowcase from "@/components/FeatureShowcase";
 import CareerCharts from "@/components/CareerCharts";
 import { Recommendation } from "@/types";
 
@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <WhyNextEndeavor />
+      <FeatureShowcase />
       <Chatbot setRecommendations={setRecommendations} />
       
       {recommendations.length > 0 && <CareerCharts recommendations={recommendations} />}
