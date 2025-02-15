@@ -1,22 +1,38 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, JSX } from "react";
 import { sendMessageToDialogflow } from "@/services/recServices";
 import { Recommendation } from "@/types";
 import { motion } from "framer-motion";
 import Spinner from "@/components/Spinner";
 import { PaperAirplaneIcon, UserCircleIcon, BoltIcon } from "@heroicons/react/24/solid";
+import { TypeAnimation } from "react-type-animation";
 
 const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommendation[]) => void }) => {
-  const [messages, setMessages] = useState([
-    { type: "bot", text: "Hello! How can I assist you with your career journey?" },
+  const [messages, setMessages] = useState<{ type: string; text: JSX.Element }[]>([
+    {
+      type: "bot",
+      text: (
+        <TypeAnimation
+          sequence={[
+            'Try "I need a new career" 👨‍💼', 2000,
+            'Try "Recommend a career path" 📈', 2000,
+            'Try "I am confused on what job to pursue" 🤔', 2000,
+            'Try "Which careers are in demand?" 🔥', 2000,
+          ]}
+          speed={50}
+          repeat={Infinity}
+        />
+      ),
+    },
   ]);
+
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
 
-  // ✅ Detect if scrolling is needed & apply auto-scroll only when necessary
+  // ✅ Auto-scroll logic
   useEffect(() => {
     const container = messagesContainerRef.current;
     if (!container) return;
@@ -25,19 +41,18 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
     const userIsNearBottom =
       container.scrollHeight - container.clientHeight - container.scrollTop < 50;
 
-    // 🚀 **Scroll ONLY if needed & user hasn't manually scrolled up**
     if (needsScrolling && shouldAutoScroll && userIsNearBottom) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
-  // ✅ Track manual scrolling & disable auto-scroll if user scrolls up
+  // ✅ Disable auto-scroll if user scrolls up
   useEffect(() => {
     const container = messagesContainerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
-      // If user scrolls up manually, disable auto-scroll
       const userScrolledUp = container.scrollTop < container.scrollHeight - container.clientHeight - 50;
       setShouldAutoScroll(!userScrolledUp);
     };
@@ -49,14 +64,21 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
-    setMessages((prevMessages) => [...prevMessages, { type: "user", text: input }]);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { type: "user", text: <span>{input}</span> },
+    ]);
+
     setInput("");
     setLoading(true);
 
     const response = await sendMessageToDialogflow(input);
-    const botReply = response.text || "I'm not sure how to respond to that.";
+    const botReply: JSX.Element = <span>{response.text || "I'm not sure how to respond to that."}</span>;
 
-    setMessages((prevMessages) => [...prevMessages, { type: "bot", text: botReply }]);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { type: "bot", text: botReply },
+    ]);
 
     if (response.recommendations && Array.isArray(response.recommendations)) {
       setRecommendations(response.recommendations);
@@ -68,9 +90,22 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
   return (
     <section className="py-12 bg-base-200">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-6">Chat with AI</h2>
+        
+        {/* ✅ Animated Title with Green Bolt Icon */}
+        <h2 className="text-4xl font-bold text-center mb-6 text-primary relative flex items-center justify-center">
+          
+          <BoltIcon className="w-10 h-10 text-[#36a35e] ml-2 animate-pulse" />
+          <motion.span
+            initial={{ textShadow: "0px 0px 8px rgba(54, 163, 94, 0)" }}
+            animate={{ textShadow: "0px 0px 12px rgba(54, 163, 94, 0.8)" }}
+            transition={{ repeat: Infinity, repeatType: "reverse", duration: 1 }}
+          >
+            Start Your AI-Powered Career Journey
+          </motion.span>
+          <BoltIcon className="w-10 h-10 text-[#36a35e] ml-2 animate-pulse" />
+        </h2>
 
-        {/* 🔥 Chat Interface (Wider & Improved) */}
+        {/* 🔥 Chat Interface */}
         <div className="max-w-3xl mx-auto bg-base-100 p-6 shadow-xl rounded-xl border border-gray-700">
           <div
             className="h-96 overflow-y-auto p-3 border border-gray-500 rounded-lg bg-base-300 space-y-4"
@@ -94,11 +129,11 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
                 <motion.div
                   className={`px-4 py-2 rounded-lg text-sm shadow-md max-w-xs md:max-w-sm lg:max-w-md ${
                     msg.type === "user"
-                      ? "bg-primary text-black"
+                      ? "bg-gray-500 text-white"
                       : "bg-gray-700 text-white"
                   }`}
                   style={{
-                    maxWidth: "70%", // ✅ Limits bubble width based on message length
+                    maxWidth: "70%",
                     wordWrap: "break-word",
                     overflowWrap: "break-word",
                   }}
@@ -111,7 +146,7 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
               </motion.div>
             ))}
 
-            {/* ✅ Auto-scroll target (Only scrolls when needed) */}
+            {/* ✅ Auto-scroll target */}
             <div ref={messagesEndRef} />
 
             {/* 🟠 Show Spinner When AI is Thinking */}
@@ -123,7 +158,7 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Spinner /> {/* ✅ Corrected Spinner Placement */}
+                  <Spinner /> 
                 </motion.div>
               </motion.div>
             )}
@@ -140,7 +175,7 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
               disabled={loading}
             />
 
-            {/* ✈ Send Button - Now using the correct green color! */}
+            {/* ✈ Send Button */}
             <motion.button
               className="btn bg-[#36a35e] text-white p-2 rounded-full hover:bg-[#2d8f52] transition"
               onClick={handleSendMessage}

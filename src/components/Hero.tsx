@@ -6,6 +6,7 @@ import Link from "next/link";
 import { fadeInUp, fadeInLeft, fadeInRight, fadeOutDown, fadeOutLeft, fadeOutRight } from "@/utils/animations";
 import { TypeAnimation } from "react-type-animation";
 
+
 const Hero = () => {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
   let lastScrollY = 0;
@@ -48,6 +49,8 @@ const Hero = () => {
         <h1 className="text-5xl md:text-6xl font-bold font-poppins leading-tight text-white">
           <TypeAnimation
             sequence={[
+              "Don't know which career to pursue?",
+              2000,
               "Discover Your Next Career Move",
               2000,
               "Let AI Guide Your Career Path",
@@ -95,19 +98,19 @@ const Hero = () => {
             animation: fadeInRight,
             reverseAnimation: fadeOutRight,
           },
-        ].map((card, index) => (
-          <motion.div
-            key={index}
-            className="w-72 p-6 bg-base-200 bg-opacity-50 backdrop-blur-md rounded-xl shadow-lg text-center border border-gray-600"
-            initial="hidden"
-            animate={scrollDirection === "down" ? "visible" : "hidden"}
-            variants={scrollDirection === "down" ? card.animation : card.reverseAnimation}
-          >
-            <h3 className="text-xl font-bold">{card.title}</h3>
-            <p className="text-sm text-gray-300">{card.description}</p>
-          </motion.div>
-        ))}
-      </div>
+          ].map((card, index) => (
+            <motion.div
+              key={index}
+              className="w-72 p-6 bg-base-200 bg-opacity-50 backdrop-blur-md rounded-xl shadow-lg text-center border border-gray-600 flex flex-col items-center" // ✅ Centering Content
+              initial="hidden"
+              animate={scrollDirection === "down" ? "visible" : "hidden"}
+              variants={scrollDirection === "down" ? card.animation : card.reverseAnimation}
+            >
+              <h3 className="text-xl font-bold">{card.title}</h3>
+              <p className="text-sm text-gray-300">{card.description}</p>
+            </motion.div>
+          ))}
+        </div>
     </section>
   );
 };

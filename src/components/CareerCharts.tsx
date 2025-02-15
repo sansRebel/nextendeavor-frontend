@@ -1,24 +1,24 @@
 "use client";
+
 import { useState } from "react";
 import SalaryChart from "./SalaryChart";
 import DemandGrowthChart from "./DemandGrowthChart";
-import SkillMatchChart from "./SkillMatchChart";
 import { Recommendation } from "@/types";
 import { saveRecommendation } from "@/services/recServices";
-import { useAuth } from "@/context/AuthContext"; // ✅ Import auth context
+import { useAuth } from "@/context/AuthContext";
+import { motion } from "framer-motion";
+import { BookmarkIcon } from "@heroicons/react/24/solid";
 
 interface CareerChartsProps {
-  recommendations: Recommendation[]; // ✅ Expect an array of recommendations
+  recommendations: Recommendation[];
 }
 
 const CareerCharts: React.FC<CareerChartsProps> = ({ recommendations }) => {
-  const { user } = useAuth(); // ✅ Check if user is authenticated
-
-  console.log("Current user in CareerCharts:", user);
-
+  const { user } = useAuth();
+  console.log("Auth User:", user); // 🛠️ Debugging - Check the user state
 
   return (
-    <div className="space-y-8 mt-6">
+    <div className="space-y-12 mt-8">
       {recommendations.map((recommendation) => (
         <CareerChartCard key={recommendation.id} recommendation={recommendation} user={user} />
       ))}
@@ -26,11 +26,10 @@ const CareerCharts: React.FC<CareerChartsProps> = ({ recommendations }) => {
   );
 };
 
-// ✅ Separate CareerChartCard component for better modularity
 const CareerChartCard = ({ recommendation, user }: { recommendation: Recommendation; user: unknown }) => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false); // ✅ Tooltip state
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const handleSave = async () => {
     if (!user) return; // ✅ Ensure user is authenticated
@@ -46,41 +45,51 @@ const CareerChartCard = ({ recommendation, user }: { recommendation: Recommendat
   };
 
   return (
-    <div className="p-6 bg-gray-100 shadow-md rounded-lg relative">
-      <h2 className="text-xl font-bold mb-4">{recommendation.title} - Career Insights</h2>
+    <motion.div
+      className="p-8 bg-gray-200 dark:bg-gray-900 shadow-lg rounded-xl relative text-black dark:text-white flex flex-col items-center text-center"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.8 }}
+    >
+      {/* 🔹 Career Title & Description - Fully Centered */}
+      <div className="mb-6 w-full">
+        <h2 className="text-2xl font-bold text-primary">{recommendation.title}</h2>
+        <p className="text-black dark:text-gray-300 mt-2">{recommendation.description}</p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 📊 Charts Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
         <SalaryChart recommendation={recommendation} />
         <DemandGrowthChart recommendation={recommendation} />
-        <SkillMatchChart recommendation={recommendation} />
       </div>
 
       {/* ✅ Save Button with Tooltip */}
-      <div className="mt-4 flex justify-end relative">
+      <div className="mt-6 flex justify-center relative">
         <button
           onClick={handleSave}
-          disabled={user === null || saving || saved}
+          disabled={!user || saving || saved} // ✅ Ensures button is disabled if user is null
           onMouseEnter={() => !user && setShowTooltip(true)} // ✅ Show tooltip if not authenticated
           onMouseLeave={() => setShowTooltip(false)}
-          className={`px-4 py-2 text-white rounded-md transition ${
+          className={`px-5 py-2 flex items-center gap-2 text-white rounded-md transition-all ${
             saved
               ? "bg-green-500 cursor-not-allowed"
               : !user
-              ? "bg-gray-400 cursor-not-allowed" // ✅ Different color for disabled
-              : "bg-blue-500 hover:bg-blue-600"
+              ? "bg-gray-500 cursor-not-allowed opacity-50"
+              : "bg-[#36a35e] hover:bg-[#2d8f52] transform hover:scale-105"
           }`}
         >
+          <BookmarkIcon className="w-5 h-5" />
           {saved ? "Saved" : saving ? "Saving..." : "Save Recommendation"}
         </button>
 
         {/* ✅ Tooltip (Only visible when user is not authenticated) */}
-        {showTooltip && (
+        {showTooltip && !user && (
           <div className="absolute bottom-12 bg-black text-white text-sm px-3 py-1 rounded shadow-md">
-            You need to be logged in to save recommendations.
+            You must log in to save this recommendation.
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

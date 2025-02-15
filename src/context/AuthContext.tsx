@@ -2,9 +2,10 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@/types/index";
+import { getUserFromToken } from "@/utils/token";
 
 interface AuthContextType {
-    user: User | null;
+    user?: unknown;
     isAuthenticated: boolean;
     login: (token: string, user: User) => void;
     logout: () => void;
@@ -13,18 +14,13 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<{ name: string; email: string } | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false); 
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if(storedUser) {
-            console.log("Retrieved user from localStorage:", JSON.parse(storedUser)); // ✅ Debug log
-            setUser(JSON.parse(storedUser));
-        }else{
-            console.log("No user logged in")
-        }
-    }, []);
+        setUser(getUserFromToken());
+        console.log("Retrieved user: ", user)
+      }, []);
 
     const login = (token: string, user: User) => {
         console.log("Login function called with user:", user);

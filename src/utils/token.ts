@@ -5,7 +5,8 @@ const USER_KEY = "authUser"; // Store user data separately
 // Store Token & User Info in localStorage
 export const setToken = (token: string, user: { name: string; email: string }) => {
     localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem(USER_KEY, JSON.stringify(user)); // Store user details
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    console.log("user set to : " , user) // Store user details
 };
 
 // Retrieve Token from localStorage

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { radialProgress, fadeInUp } from "@/utils/animations";
+import { AcademicCapIcon, ChartBarIcon, LightBulbIcon } from "@heroicons/react/24/solid"; // ✅ Heroicons added
 
 const DynamicInfographic = () => {
   const controls = useAnimation();
@@ -29,7 +30,8 @@ const DynamicInfographic = () => {
   }, [isInView, controls]);
 
   return (
-    <section className="relative py-16 bg-background">
+    <section className="relative py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
+      {/* ✅ Dynamically Adapts to Light/Dark Mode */}
       <div className="container mx-auto px-6">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 items-center gap-12"
@@ -46,20 +48,35 @@ const DynamicInfographic = () => {
             viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <h3 className="text-2xl font-semibold text-primary">AI-Powered Career Matching</h3>
-            <p className="text-gray-400">
-              Our AI model analyzes <strong>your skills, interests, and job market data</strong> to generate the best career recommendations.
+            <h3 className="text-3xl font-bold text-primary flex items-center gap-2">
+              <LightBulbIcon className="w-8 h-8 text-primary" /> AI-Powered Career Matching
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+              Our AI model analyzes <strong className="text-black dark:text-white">your skills, interests, and job market data</strong> to generate the best career recommendations.
             </p>
-            <ul className="space-y-3 text-gray-300">
-              <li>✔ Matches <strong>your top skills</strong> with high-demand careers</li>
-              <li>✔ Analyzes <strong>interest compatibility</strong></li>
-              <li>✔ Considers <strong>industry growth projections</strong></li>
+            <ul className="space-y-3 text-gray-600 dark:text-gray-400 text-lg">
+              <li className="flex items-center gap-2">
+                <AcademicCapIcon className="w-6 h-6 text-primary" />
+                Matches <strong className="text-black dark:text-white">your top skills</strong> with high-demand careers
+              </li>
+              <li className="flex items-center gap-2">
+                <LightBulbIcon className="w-6 h-6 text-primary" />
+                Analyzes <strong className="text-black dark:text-white">interest compatibility</strong>
+              </li>
+              <li className="flex items-center gap-2">
+                <ChartBarIcon className="w-6 h-6 text-primary" />
+                Considers <strong className="text-black dark:text-white">industry growth projections</strong>
+              </li>
             </ul>
           </motion.div>
 
           {/* 🔹 Animated Circular Progress Loader */}
-          <motion.div className="relative flex flex-col items-center">
-            <svg width="140" height="140" viewBox="0 0 100 100" className="transform -rotate-90">
+          {/* 🔹 Animated Circular Progress Loader */}
+          <motion.div
+            className="relative flex flex-col items-center"
+            // whileHover={{ scale: 1.05 }} // ✅ Entire component scales, text stays in place
+          >
+            <svg width="160" height="160" viewBox="0 0 100 100" className="transform -rotate-90">
               {/* 🟢 Background Circle (Static Gray) */}
               <circle cx="50" cy="50" r="45" stroke="gray" strokeWidth="6" fill="none" />
 
@@ -68,28 +85,39 @@ const DynamicInfographic = () => {
                 cx="50"
                 cy="50"
                 r="45"
-                stroke="var(--primary)" // 🟢 Green Stroke
+                stroke="url(#gradientStroke)" // 🟢 Gradient Stroke
                 strokeWidth="6"
                 fill="none"
                 strokeDasharray="113" // 🔥 Full circle length
-                strokeDashoffset="113" // 🔥 Controls animation (starts empty)
-                variants={radialProgress} // ✅ Animates dynamically
+                strokeDashoffset="113" // 🔥 Starts empty
+                variants={radialProgress} // ✅ Animation
                 initial="hidden"
                 animate="visible"
                 className="circular-progress"
               />
+
+              {/* Gradient for Stroke Effect */}
+              <defs>
+                <linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#36D399" />
+                  <stop offset="100%" stopColor="#2DB872" />
+                </linearGradient>
+              </defs>
             </svg>
 
-            {/* 🔥 Percentage Text (Now Counts Up!) */}
-            <span className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-black">
+            {/* 🔥 Perfectly Centered Percentage Text */}
+            <motion.span
+              className="absolute flex items-center justify-center w-full h-full top-0 left-0 text-4xl font-bold text-black dark:text-white"
+            >
               {count}%
-            </span>
+            </motion.span>
 
-            {/* ✅ Text Below Circle (Clarifies What 87% Means) */}
-            <p className="text-center text-gray-400 mt-2">
-              AI Confidence Score: <strong>87% match</strong> based on your skills & interests.
+            {/* ✅ Text Below Circle */}
+            <p className="text-center text-gray-700 dark:text-gray-300 mt-3 text-lg">
+              AI Confidence Score: <strong className="text-black dark:text-white">87% match</strong> based on your skills & interests.
             </p>
           </motion.div>
+
         </motion.div>
       </div>
     </section>
