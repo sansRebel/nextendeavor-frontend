@@ -1,34 +1,43 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation"; // ✅ Ensure params are correctly extracted
 import { fetchCareerDetails } from "@/services/recServices";
 import { Recommendation } from "@/types";
-import CareerClient from "@/components/CareerClient"; // Import the Client Component
+import CareerClient from "@/components/CareerClient"; // ✅ Import Client Component
+import Spinner from "@/components/Spinner"; // ✅ Optional loading spinner
 
-export default async function CareerPage({ params }: { params: { careerId: string } }) {
-  const { careerId } = params; // ✅ Correct way to get the careerId
+export default function CareerPage() {
+  const { careerId } = useParams(); // ✅ Extract careerId safely
+  const [career, setCareer] = useState<Recommendation | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  try {
-    const career: Recommendation = await fetchCareerDetails(careerId);
-
-    if (!career) {
-      return <p className="text-center text-red-500">Career not found.</p>;
+  useEffect(() => {
+    if (!careerId) {
+      setError("Invalid career ID.");
+      setLoading(false);
+      return;
     }
 
-    // Extract Salary Values
-    const extractSalaries = (salaryRange: string) => {
-      const match = salaryRange.match(/\$([\d,]+) - \$([\d,]+)/);
-      if (match) {
-        return {
-          salaryMin: parseInt(match[1].replace(/,/g, ""), 10),
-          salaryMax: parseInt(match[2].replace(/,/g, ""), 10),
-        };
+    const fetchCareer = async () => {
+      try {
+        const data = await fetchCareerDetails(careerId as string);
+        setCareer(data);
+      } catch (err) {
+        console.error("Error fetching career:", err);
+        setError("Career not found or failed to load.");
+      } finally {
+        setLoading(false);
       }
-      return { salaryMin: null, salaryMax: null };
     };
 
-    const { salaryMin, salaryMax } = extractSalaries(career.salaryRange);
+    fetchCareer();
+  }, [careerId]);
 
-    return <CareerClient career={{ ...career, salaryMin, salaryMax }} />;
-  } catch (error) {
-    console.error("Error fetching career details:", error);
-    return <p className="text-center text-red-500">Error loading career details.</p>;
-  }
+  if (loading) return <Spinner />; // ✅ Show loading indicator
+
+  if (error) return <p className="text-center text-red-500">{error}</p>; // ✅ Show error
+
+  return <CareerClient career={career!} />;
 }
