@@ -47,3 +47,21 @@ export const clearSavedRecommendations = async () => {
     await apiClient.delete("/api/recommendations/clear");
 }
 
+export const fetchCareerDetails = async (careerId: string): Promise<Recommendation> => {
+  if (!careerId) {
+    throw new Error("Invalid career ID");
+  }
+
+  console.log(`Fetching career details for ID: ${careerId}`); // ✅ Log the ID
+
+  try {
+    const response = await apiClient.get(`/api/recommendations/career/${careerId}`);
+    console.log("Career details fetched successfully:", response.data); // ✅ Log API response
+    return response.data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error(`Error fetching career details for ID ${careerId}:`, error?.response?.data || error);
+    throw new Error("Career not found or API request failed");
+  }
+};
+

@@ -17,7 +17,6 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
             'Try "I need a new career" 👨‍💼', 2000,
             'Try "Recommend a career path" 📈', 2000,
             'Try "I am confused on what job to pursue" 🤔', 2000,
-            'Try "Which careers are in demand?" 🔥', 2000,
           ]}
           speed={50}
           repeat={Infinity}
@@ -30,44 +29,38 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
+  const isUserInteracting = useRef(false);
+  
 
   // ✅ Auto-scroll logic
   useEffect(() => {
-    const container = messagesContainerRef.current;
-    if (!container) return;
-
-    const needsScrolling = container.scrollHeight > container.clientHeight;
-    const userIsNearBottom =
-      container.scrollHeight - container.clientHeight - container.scrollTop < 50;
-
-    if (needsScrolling && shouldAutoScroll && userIsNearBottom) {
+    if (!isUserInteracting.current) return; // ❌ Prevent auto-scrolling on initial load
+  
+    setTimeout(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, 100); // ✅ Small delay to allow rendering before scrolling
+  
+    isUserInteracting.current = false; // ✅ Reset after scrolling
   }, [messages]);
+  
+
+  
+
+
+  
 
   // ✅ Disable auto-scroll if user scrolls up
-  useEffect(() => {
-    const container = messagesContainerRef.current;
-    if (!container) return;
 
-    const handleScroll = () => {
-      const userScrolledUp = container.scrollTop < container.scrollHeight - container.clientHeight - 50;
-      setShouldAutoScroll(!userScrolledUp);
-    };
-
-    container.addEventListener("scroll", handleScroll);
-    return () => container.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
+    isUserInteracting.current = true;
     setMessages((prevMessages) => [
       ...prevMessages,
       { type: "user", text: <span>{input}</span> },
     ]);
+    
 
     setInput("");
     setLoading(true);
@@ -78,7 +71,10 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
     setMessages((prevMessages) => [
       ...prevMessages,
       { type: "bot", text: botReply },
+      
     ]);
+
+
 
     if (response.recommendations && Array.isArray(response.recommendations)) {
       setRecommendations(response.recommendations);
@@ -86,6 +82,9 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
 
     setLoading(false);
   };
+
+  
+
 
   return (
     <section className="py-12 bg-base-200">

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { fadeInUp, fadeInLeft, fadeInRight, fadeOutDown, fadeOutLeft, fadeOutRight } from "@/utils/animations";
 import { TypeAnimation } from "react-type-animation";
 
-
 const Hero = () => {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
   let lastScrollY = 0;
@@ -24,7 +23,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative h-[160vh] flex flex-col items-center justify-center text-foreground overflow-hidden">
+    <section className="relative h-[100vh] flex flex-col items-center justify-center text-foreground overflow-hidden px-4 md:px-6">
       {/* 🎥 Video Background */}
       <video
         className="absolute inset-0 w-full h-full object-cover"
@@ -40,13 +39,13 @@ const Hero = () => {
 
       {/* 🌟 Main Hero Content */}
       <motion.div
-        className="text-center px-6 z-10 max-w-3xl"
+        className="text-center px-4 sm:px-6 md:px-8 z-10 max-w-3xl"
         initial="hidden"
         animate="visible"
         variants={fadeInUp}
       >
         {/* 1️⃣ Typing Effect */}
-        <h1 className="text-5xl md:text-6xl font-bold font-poppins leading-tight text-white">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-poppins leading-tight text-white">
           <TypeAnimation
             sequence={[
               "Don't know which career to pursue?",
@@ -61,14 +60,14 @@ const Hero = () => {
           />
         </h1>
 
-        <p className="py-4 text-lg md:text-xl text-gray-300">
+        <p className="py-4 text-base sm:text-lg md:text-xl text-gray-300">
           Let AI guide you towards the perfect career path based on your skills and interests.
         </p>
 
         {/* 🚀 2️⃣ Call-to-Action Button with Glow & Ripple Effect */}
         <Link href="/profile">
           <motion.button
-            className="relative overflow-hidden px-6 py-3 rounded-lg bg-[#22c55e] hover:bg-green-500 text-white text-lg shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300"
+            className=" mb-10 relative overflow-hidden px-5 sm:px-6 py-2 sm:py-3 rounded-lg bg-[#22c55e] hover:bg-green-500 text-white text-base sm:text-lg shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300"
             whileHover={{ scale: 1.05 }}
           >
             Get Started →
@@ -78,7 +77,7 @@ const Hero = () => {
       </motion.div>
 
       {/* 3️⃣ Extra Animated Content Appearing as You Scroll */}
-      <div className="absolute bottom-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="absolute bottom-10 w-full px-4 flex flex-col sm:flex-row items-center sm:justify-center gap-6">
         {[
           {
             title: "AI-Powered Guidance",
@@ -98,19 +97,19 @@ const Hero = () => {
             animation: fadeInRight,
             reverseAnimation: fadeOutRight,
           },
-          ].map((card, index) => (
-            <motion.div
-              key={index}
-              className="w-72 p-6 bg-base-200 bg-opacity-50 backdrop-blur-md rounded-xl shadow-lg text-center border border-gray-600 flex flex-col items-center" // ✅ Centering Content
-              initial="hidden"
-              animate={scrollDirection === "down" ? "visible" : "hidden"}
-              variants={scrollDirection === "down" ? card.animation : card.reverseAnimation}
-            >
-              <h3 className="text-xl font-bold">{card.title}</h3>
-              <p className="text-sm text-gray-300">{card.description}</p>
-            </motion.div>
-          ))}
-        </div>
+        ].map((card, index) => (
+          <motion.div
+            key={index}
+            className="w-full sm:w-72 p-5 sm:p-6 bg-base-200 bg-opacity-50 backdrop-blur-md rounded-xl shadow-lg text-center border border-gray-600 flex flex-col items-center"
+            initial="hidden"
+            animate={scrollDirection === "down" ? "visible" : "hidden"}
+            variants={scrollDirection === "down" ? card.animation : card.reverseAnimation}
+          >
+            <h3 className="text-lg sm:text-xl font-bold">{card.title}</h3>
+            <p className="text-sm sm:text-base text-gray-300">{card.description}</p>
+          </motion.div>
+        ))}
+      </div>
     </section>
   );
 };

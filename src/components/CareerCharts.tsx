@@ -6,8 +6,10 @@ import DemandGrowthChart from "./DemandGrowthChart";
 import { Recommendation } from "@/types";
 import { saveRecommendation } from "@/services/recServices";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation"; // Import Next.js Router
 import { motion } from "framer-motion";
-import { BookmarkIcon } from "@heroicons/react/24/solid";
+import { BookmarkIcon, EyeIcon } from "@heroicons/react/24/solid";
+import Toast from "./Toast";
 
 interface CareerChartsProps {
   recommendations: Recommendation[];
@@ -15,21 +17,31 @@ interface CareerChartsProps {
 
 const CareerCharts: React.FC<CareerChartsProps> = ({ recommendations }) => {
   const { user } = useAuth();
-  console.log("Auth User:", user); // 🛠️ Debugging - Check the user state
+  const router = useRouter(); // ✅ Initialize router for navigation
 
   return (
     <div className="space-y-12 mt-8">
       {recommendations.map((recommendation) => (
-        <CareerChartCard key={recommendation.id} recommendation={recommendation} user={user} />
+        <CareerChartCard key={recommendation.id} recommendation={recommendation} user={user} router={router} />
       ))}
     </div>
   );
 };
 
-const CareerChartCard = ({ recommendation, user }: { recommendation: Recommendation; user: unknown }) => {
+const CareerChartCard = ({
+  recommendation,
+  user,
+  router,
+}: {
+  recommendation: Recommendation;
+  user: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  router: any;
+}) => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+
 
   const handleSave = async () => {
     if (!user) return; // ✅ Ensure user is authenticated
@@ -38,11 +50,18 @@ const CareerChartCard = ({ recommendation, user }: { recommendation: Recommendat
     try {
       await saveRecommendation(recommendation.id);
       setSaved(true);
+      setToast({ message: "Recommendation saved successfully!", type: "success" });
     } catch (error) {
       console.error("Error saving recommendation:", error);
+      setToast({ message: "Failed to save recommendation.", type: "error" });
     }
     setSaving(false);
   };
+
+  const handleViewMore = () => {
+    router.push(`/career/${recommendation.id}`); // ✅ Navigate to the correct page
+  };
+  
 
   return (
     <motion.div
@@ -63,32 +82,40 @@ const CareerChartCard = ({ recommendation, user }: { recommendation: Recommendat
         <DemandGrowthChart recommendation={recommendation} />
       </div>
 
-      {/* ✅ Save Button with Tooltip */}
-      <div className="mt-6 flex justify-center relative">
-        <button
-          onClick={handleSave}
-          disabled={!user || saving || saved} // ✅ Ensures button is disabled if user is null
-          onMouseEnter={() => !user && setShowTooltip(true)} // ✅ Show tooltip if not authenticated
-          onMouseLeave={() => setShowTooltip(false)}
-          className={`px-5 py-2 flex items-center gap-2 text-white rounded-md transition-all ${
-            saved
-              ? "bg-green-500 cursor-not-allowed"
-              : !user
-              ? "bg-gray-500 cursor-not-allowed opacity-50"
-              : "bg-[#36a35e] hover:bg-[#2d8f52] transform hover:scale-105"
-          }`}
-        >
-          <BookmarkIcon className="w-5 h-5" />
-          {saved ? "Saved" : saving ? "Saving..." : "Save Recommendation"}
-        </button>
-
-        {/* ✅ Tooltip (Only visible when user is not authenticated) */}
-        {showTooltip && !user && (
-          <div className="absolute bottom-12 bg-black text-white text-sm px-3 py-1 rounded shadow-md">
-            You must log in to save this recommendation.
-          </div>
-        )}
+      {/* ✅ Buttons Section */}
+      <div className="mt-6 flex justify-center gap-4">
+        <div className={`relative ${!user ? "tooltip tooltip-top" : ""}`} data-tip={!user ? "You must log in to save this recommendation." : ""}>
+          <button
+            onClick={handleSave}
+            disabled={!user || saving || saved}
+            className={`px-5 py-2 flex items-center gap-2 text-white rounded-md transition-all ${
+              saved
+                ? "bg-green-500 cursor-not-allowed"
+                : !user
+                ? "bg-gray-500 cursor-not-allowed opacity-50"
+                : "bg-[#36a35e] hover:bg-[#2d8f52] transform hover:scale-105"
+            }`}
+          >
+            <BookmarkIcon className="w-5 h-5" />
+            {saved ? "Saved" : saving ? "Saving..." : "Save"}
+          </button>
       </div>
+
+
+        {/* View More Button */}
+        <button
+          onClick={handleViewMore} // ✅ Call the function before redirecting
+          className="px-5 py-2 flex items-center gap-2 bg-blue-600 text-white rounded-md transition-all hover:bg-blue-700 transform hover:scale-105"
+        >
+          <EyeIcon className="w-5 h-5" />
+          View More
+        </button>
+      </div>
+
+
+
+      
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </motion.div>
   );
 };

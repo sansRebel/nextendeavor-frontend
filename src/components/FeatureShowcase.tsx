@@ -71,7 +71,6 @@ const DynamicInfographic = () => {
           </motion.div>
 
           {/* 🔹 Animated Circular Progress Loader */}
-          {/* 🔹 Animated Circular Progress Loader */}
           <motion.div
             className="relative flex flex-col items-center"
             // whileHover={{ scale: 1.05 }} // ✅ Entire component scales, text stays in place
@@ -88,13 +87,15 @@ const DynamicInfographic = () => {
                 stroke="url(#gradientStroke)" // 🟢 Gradient Stroke
                 strokeWidth="6"
                 fill="none"
-                strokeDasharray="113" // 🔥 Full circle length
-                strokeDashoffset="113" // 🔥 Starts empty
-                variants={radialProgress} // ✅ Animation
+                strokeDasharray="113" // ✅ Keep full perimeter length
+                strokeDashoffset={(113 * (100 - count)) / 100} // ✅ Properly calculates shaded area
+                variants={radialProgress} // ✅ Uses animation
                 initial="hidden"
                 animate="visible"
                 className="circular-progress"
               />
+
+
 
               {/* Gradient for Stroke Effect */}
               <defs>

@@ -5,6 +5,7 @@ import { fadeIn, staggerContainer } from "@/utils/animations";
 import { BriefcaseIcon, LightBulbIcon, ChartBarIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { FaEnvelope, FaLinkedin, FaInstagram } from "react-icons/fa";
 
+
 export default function About() {
   return (
     <main className="container mx-auto px-6 py-16 max-w-4xl">

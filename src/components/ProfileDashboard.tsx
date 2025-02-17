@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { getUserFromToken, removeToken } from "@/utils/token";
 import { deleteAccount } from "@/services/userServices";
 import { fetchSavedRecommendations, clearSavedRecommendations } from "@/services/recServices";
@@ -24,6 +25,7 @@ const ProfileDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setUser(getUserFromToken());
@@ -92,9 +94,9 @@ const ProfileDashboard = () => {
       {/* ✅ Profile Section */}
       <motion.div
         className="bg-base-200 p-8 rounded-xl shadow-lg max-w-2xl mx-auto text-center"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.4, ease: "easeOut" }} // ⏩ Reduced duration & smoother easing
       >
         {user ? (
           <>
@@ -165,14 +167,17 @@ const ProfileDashboard = () => {
           <p className="text-center text-gray-500">Saved recommendations from the AI will be displayed here.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {savedRecommendations.map((rec, index) => (
+            {savedRecommendations.map((rec) => (
               <motion.div
-                key={rec.id}
-                className="p-6 bg-slate-200 dark:bg-gray-900 text-black dark:text-white shadow-md rounded-lg relative transition-transform hover:scale-105"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                key={rec.careerId}
+                onClick={() => router.push(`/career/${rec.careerId}`)} 
+                className="p-6 bg-slate-200 dark:bg-gray-900 text-black dark:text-white shadow-md rounded-lg relative transition-transform cursor-pointer"
+                whileHover={{ scale: 1.08 }} // ✅ Slight scale-up on hover
+                whileTap={{ scale: 0.95 }}   // ✅ Quick scale-down on click
+                transition={{ duration: 0.2, ease: "easeOut" }} 
               >
+
+
                 <h3 className="text-xl font-bold">{rec.title}</h3>
                 <p className="text-gray-900 dark:text-gray-400">{rec.description}</p>
                 <p className="text-sm  text-gray-800 dark:text-gray-400">Skills: {rec.requiredSkills.join(", ")}</p>

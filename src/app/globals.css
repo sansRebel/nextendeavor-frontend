@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600&family=Space+Grotesk:wght@400;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -20,19 +20,22 @@
     --background: #0a0a0a;
     --foreground: #ededed;
     --primary: #36a35e;
-;
     --secondary: #c084fc;
     --accent: #1e90ff;
     --error: #ef4444;
   }
 }
 
-/* body {
-  @apply bg-background text-foreground font-inter;
-} */
+/* ✅ Fix: Use `var(--background)` instead of `@apply bg-background` */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "DM Sans", sans-serif;
+}
 
+/* ✅ Ensure Headings Use Space Grotesk */
 h1, h2, h3, h4 {
-  @apply font-poppins;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 /* 🟢 Glowing Button Effect */
