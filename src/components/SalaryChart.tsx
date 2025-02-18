@@ -63,13 +63,13 @@ const SalaryChart: React.FC<SalaryChartProps> = ({ recommendation }) => {
             type="category" 
             dataKey="name" 
             stroke="white"
-            width={100} // ✅ Adds more space for labels
+            width={50} 
+            className="sm:!w-100" 
           />
 
-          {/* 💡 Custom Tooltip with "$" formatting */}
+
           <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255, 255, 255, 0.1)" }} />
 
-          {/* 🟩 Animated Salary Bars with Hover Effect */}
           <Bar 
             dataKey="salary" 
             fill="#36a35e" 
@@ -77,11 +77,12 @@ const SalaryChart: React.FC<SalaryChartProps> = ({ recommendation }) => {
             radius={[5, 5, 5, 5]}
             className="transition-all duration-300 hover:opacity-80"
           >
+
             <LabelList 
               dataKey="salary" 
-              position="insideRight" // ✅ Adjusted for better visibility
+              position="insideRight" 
               fill="white" 
-              fontSize={14} // ✅ Increased for clarity
+              fontSize={14} 
               formatter={(value: number) => `$${value.toLocaleString()}`} 
             />
           </Bar>

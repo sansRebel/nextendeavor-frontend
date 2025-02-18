@@ -172,8 +172,8 @@ const ProfileDashboard = () => {
                 key={rec.careerId}
                 onClick={() => router.push(`/career/${rec.careerId}`)} 
                 className="p-6 bg-slate-200 dark:bg-gray-900 text-black dark:text-white shadow-md rounded-lg relative transition-transform cursor-pointer"
-                whileHover={{ scale: 1.08 }} // ✅ Slight scale-up on hover
-                whileTap={{ scale: 0.95 }}   // ✅ Quick scale-down on click
+                whileHover={{ scale: 1.08 }} 
+                whileTap={{ scale: 0.95 }}   
                 transition={{ duration: 0.2, ease: "easeOut" }} 
               >
 
@@ -181,7 +181,7 @@ const ProfileDashboard = () => {
                 <h3 className="text-xl font-bold">{rec.title}</h3>
                 <p className="text-gray-900 dark:text-gray-400">{rec.description}</p>
                 <p className="text-sm  text-gray-800 dark:text-gray-400">Skills: {rec.requiredSkills.join(", ")}</p>
-                <p className="text-sm  text-gray-700 dark:text-gray-400">Salary: ${rec.salaryMax?.toLocaleString()}</p>
+                <p className="text-sm  text-gray-700 dark:text-gray-400">Salary: {rec.salaryRange.toLocaleString()}</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Demand: {rec.demand} /10</p>
                 <p className="text-xs text-gray-500 mt-2">Saved on: {new Date(rec.savedAt).toLocaleDateString()}</p>
 

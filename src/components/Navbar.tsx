@@ -12,6 +12,7 @@ import {
   Bars3Icon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
+import LoginPrompt from "./LoginPrompt";
 
 const Navbar = () => {
   const [user, setUser] = useState<{ name: string } | null>(null);
@@ -131,7 +132,9 @@ const Navbar = () => {
           </div>
         </div>
       )}
-    </nav>
+          {!user && <LoginPrompt />}
+
+    </nav>    
   );
 };
 
