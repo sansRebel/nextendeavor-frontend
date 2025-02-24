@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/bolt.ico" type="image/x-icon" />
+        <link rel="icon" href="bolt.ico" type="image/x-icon" />
       </head>
       <body className="dark flex flex-col min-h-screen">
         <AuthProvider> 
