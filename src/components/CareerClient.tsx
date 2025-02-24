@@ -9,7 +9,7 @@ import { Recommendation } from "@/types";
 import { BookmarkIcon, ChartBarSquareIcon, CurrencyDollarIcon, ArrowTrendingUpIcon, BriefcaseIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
 import { fadeInUp, fadeInLeft, fadeInRight, staggerContainer } from "@/utils/animations";
-import Toast from "@/components/Toast"; // ✅ Toast Notification Component
+import Toast from "@/components/Toast"; 
 
 interface CareerClientProps {
   career: Recommendation;

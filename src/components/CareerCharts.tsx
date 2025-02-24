@@ -6,7 +6,7 @@ import DemandGrowthChart from "./DemandGrowthChart";
 import { Recommendation } from "@/types";
 import { saveRecommendation } from "@/services/recServices";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation"; // Import Next.js Router
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { BookmarkIcon, EyeIcon } from "@heroicons/react/24/solid";
 import Toast from "./Toast";
@@ -17,7 +17,7 @@ interface CareerChartsProps {
 
 const CareerCharts: React.FC<CareerChartsProps> = ({ recommendations }) => {
   const { user } = useAuth();
-  const router = useRouter(); // ✅ Initialize router for navigation
+  const router = useRouter(); 
 
   return (
     <div className="space-y-12 mt-8">
@@ -44,7 +44,7 @@ const CareerChartCard = ({
 
 
   const handleSave = async () => {
-    if (!user) return; // ✅ Ensure user is authenticated
+    if (!user) return; 
 
     setSaving(true);
     try {
@@ -59,7 +59,7 @@ const CareerChartCard = ({
   };
 
   const handleViewMore = () => {
-    router.push(`/career/${recommendation.id}`); // ✅ Navigate to the correct page
+    router.push(`/career/${recommendation.id}`); 
   };
   
 
@@ -70,19 +70,16 @@ const CareerChartCard = ({
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8 }}
     >
-      {/* 🔹 Career Title & Description - Fully Centered */}
       <div className="mb-6 w-full">
         <h2 className="text-2xl font-bold text-primary">{recommendation.title}</h2>
         <p className="text-black dark:text-gray-300 mt-2">{recommendation.description}</p>
       </div>
 
-      {/* 📊 Charts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
         <SalaryChart recommendation={recommendation} />
         <DemandGrowthChart recommendation={recommendation} />
       </div>
 
-      {/* ✅ Buttons Section */}
       <div className="mt-6 flex justify-center gap-4">
         <div className={`relative ${!user ? "tooltip tooltip-top" : ""}`} data-tip={!user ? "You must log in to save this recommendation." : ""}>
           <button
@@ -104,7 +101,7 @@ const CareerChartCard = ({
 
         {/* View More Button */}
         <button
-          onClick={handleViewMore} // ✅ Call the function before redirecting
+          onClick={handleViewMore} 
           className="px-5 py-2 flex items-center gap-2 bg-blue-600 text-white rounded-md transition-all hover:bg-blue-700 transform hover:scale-105"
         >
           <EyeIcon className="w-5 h-5" />

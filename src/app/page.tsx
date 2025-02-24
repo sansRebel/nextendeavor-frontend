@@ -7,7 +7,7 @@ import CareerCharts from "@/components/CareerCharts";
 import { Recommendation } from "@/types";
 
 export default function Home() {
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([]); // ✅ Fix: Ensure array type
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]); 
 
   return (
     <div>

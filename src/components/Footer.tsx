@@ -5,12 +5,12 @@ const Footer = () => {
     <footer className="bg-gray-900 text-white py-6 shadow-inner mt-1">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-6">
         
-        {/* 🌍 Branding & Copyright */}
+        {/*  Branding & Copyright */}
         <p className="text-sm text-gray-400">
           © {new Date().getFullYear()} <span className="text-primary font-semibold">NextEndeavor</span>. All rights reserved.
         </p>
 
-        {/* 🔗 Social Media Links */}
+        {/*  Social Media Links */}
         <div className="flex gap-5 text-xl mt-4 md:mt-0">
           <a
             href="https://instagram.com/khaledalsanafi"

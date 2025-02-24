@@ -34,17 +34,14 @@ const Toast: React.FC<ToastProps> = ({ message, type, duration = 3000, onClose }
           className={`fixed bottom-5 right-5 z-50 flex items-center gap-4 px-5 py-4 rounded-lg shadow-xl w-80 text-white 
             ${type === "success" ? "bg-green-600" : "bg-red-600"}`}
         >
-          {/* ✅ Icon */}
           {type === "success" ? (
             <CheckCircleIcon className="w-7 h-7 text-white" />
           ) : (
             <ExclamationTriangleIcon className="w-7 h-7 text-white" />
           )}
 
-          {/* ✅ Message */}
           <span className="flex-1 text-base font-medium">{message}</span>
 
-          {/* ✅ Close Button */}
           <button onClick={() => setVisible(false)} className="focus:outline-none">
             <XMarkIcon className="w-6 h-6 text-white opacity-70 hover:opacity-100 transition-opacity" />
           </button>

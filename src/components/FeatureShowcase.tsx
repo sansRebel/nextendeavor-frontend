@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { radialProgress, fadeInUp } from "@/utils/animations";
-import { AcademicCapIcon, ChartBarIcon, LightBulbIcon } from "@heroicons/react/24/solid"; // ✅ Heroicons added
+import { AcademicCapIcon, ChartBarIcon, LightBulbIcon } from "@heroicons/react/24/solid"; 
 
 const DynamicInfographic = () => {
   const controls = useAnimation();
@@ -15,10 +15,10 @@ const DynamicInfographic = () => {
     if (isInView) {
       controls.start("visible");
 
-      // ✅ Animate percentage count from 0% to 87%
+      
       let start = 0;
       const end = 87;
-      const duration = 2000; // 2 seconds
+      const duration = 2000; 
       const intervalTime = Math.floor(duration / end);
 
       const counter = setInterval(() => {
@@ -31,7 +31,7 @@ const DynamicInfographic = () => {
 
   return (
     <section className="relative py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
-      {/* ✅ Dynamically Adapts to Light/Dark Mode */}
+      {}
       <div className="container mx-auto px-6">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 items-center gap-12"
@@ -40,7 +40,7 @@ const DynamicInfographic = () => {
           variants={fadeInUp}
           ref={ref}
         >
-          {/* 🔹 AI-Powered Career Matching Text */}
+          {}
           <motion.div
             className="space-y-6"
             initial="hidden"
@@ -70,26 +70,26 @@ const DynamicInfographic = () => {
             </ul>
           </motion.div>
 
-          {/* 🔹 Animated Circular Progress Loader */}
+          {}
           <motion.div
             className="relative flex flex-col items-center"
-            // whileHover={{ scale: 1.05 }} // ✅ Entire component scales, text stays in place
+            
           >
             <svg width="160" height="160" viewBox="0 0 100 100" className="transform -rotate-90">
-              {/* 🟢 Background Circle (Static Gray) */}
+              {}
               <circle cx="50" cy="50" r="45" stroke="gray" strokeWidth="6" fill="none" />
 
-              {/* ✅ Animated Progress Circle */}
+              {}
               <motion.circle
                 cx="50"
                 cy="50"
                 r="45"
-                stroke="url(#gradientStroke)" // 🟢 Gradient Stroke
+                stroke="url(#gradientStroke)" 
                 strokeWidth="6"
                 fill="none"
-                strokeDasharray="113" // ✅ Keep full perimeter length
-                strokeDashoffset={(113 * (100 - count)) / 100} // ✅ Properly calculates shaded area
-                variants={radialProgress} // ✅ Uses animation
+                strokeDasharray="113" 
+                strokeDashoffset={(113 * (100 - count)) / 100} 
+                variants={radialProgress} 
                 initial="hidden"
                 animate="visible"
                 className="circular-progress"
@@ -97,7 +97,7 @@ const DynamicInfographic = () => {
 
 
 
-              {/* Gradient for Stroke Effect */}
+              {}
               <defs>
                 <linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#36D399" />
@@ -106,14 +106,14 @@ const DynamicInfographic = () => {
               </defs>
             </svg>
 
-            {/* 🔥 Perfectly Centered Percentage Text */}
+            {}
             <motion.span
               className="absolute flex items-center justify-center w-full h-full top-0 left-0 text-4xl font-bold text-black dark:text-white"
             >
               {count}%
             </motion.span>
 
-            {/* ✅ Text Below Circle */}
+            {}
             <p className="text-center text-gray-700 dark:text-gray-300 mt-3 text-lg">
               AI Confidence Score: <strong className="text-black dark:text-white">87% match</strong> based on your skills & interests.
             </p>

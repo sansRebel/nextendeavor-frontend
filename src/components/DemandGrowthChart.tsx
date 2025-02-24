@@ -8,11 +8,12 @@ interface DemandGrowthChartProps {
   recommendation: Recommendation;
 }
 
-// Custom tooltip for better readability
+
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
-    const data = payload[0].payload; // Extract data
+    const data = payload[0].payload; 
 
     return (
       <div className="bg-gray-800 text-white p-3 rounded-lg shadow-lg border border-gray-600">
@@ -25,7 +26,8 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-// Custom bubble shape
+
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomBubble = (props: any) => {
   const { cx, cy, payload } = props;
@@ -78,7 +80,7 @@ const DemandGrowthChart: React.FC<DemandGrowthChartProps> = ({ recommendation })
         <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="gray" />
 
-          {/* 🟢 X-Axis (Demand) */}
+          {}
           <XAxis 
             type="number" 
             dataKey="demand" 
@@ -91,7 +93,7 @@ const DemandGrowthChart: React.FC<DemandGrowthChartProps> = ({ recommendation })
             <Label value="Career Demand" position="insideBottom" offset={-5} fill="white" />
           </XAxis>
 
-          {/* 🔵 Y-Axis (Growth) */}
+          {}
           <YAxis 
             type="number" 
             dataKey="growth" 
@@ -104,16 +106,16 @@ const DemandGrowthChart: React.FC<DemandGrowthChartProps> = ({ recommendation })
             <Label value="Growth Potential" angle={-90} position="insideLeft" fill="white" />
           </YAxis>
 
-          {/* 🔴 Bubble Size Scaling */}
+          {}
           <ZAxis dataKey="size" range={[50, 300]} />
 
-          {/* 🟡 Custom Tooltip */}
+          {}
           <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: "3 3" }} />
 
-          {/* 🔵 Demand-Growth Bubble Scatter */}
+          {}
           <Scatter name="Career" data={data} fill="url(#bubbleGradient)" shape={CustomBubble} />
 
-          {/* 🟠 Gradient for Bubble Effect */}
+          {}
           <defs>
             <radialGradient id="bubbleGradient" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="#ff4081" stopOpacity={0.8} />

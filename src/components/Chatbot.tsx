@@ -32,15 +32,14 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
   const isUserInteracting = useRef(false);
   
 
-  // ✅ Auto-scroll logic
   useEffect(() => {
-    if (!isUserInteracting.current) return; // ❌ Prevent auto-scrolling on initial load
+    if (!isUserInteracting.current) return;
   
     setTimeout(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100); // ✅ Small delay to allow rendering before scrolling
+    }, 100); 
   
-    isUserInteracting.current = false; // ✅ Reset after scrolling
+    isUserInteracting.current = false; 
   }, [messages]);
   
 
@@ -49,7 +48,6 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
 
   
 
-  // ✅ Disable auto-scroll if user scrolls up
 
 
   const handleSendMessage = async () => {
@@ -90,7 +88,7 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
     <section className="py-12 bg-base-200">
       <div className="container mx-auto">
         
-        {/* ✅ Animated Title with Green Bolt Icon */}
+        {}
         <h2 className="text-4xl font-bold text-center mb-6 text-primary relative flex items-center justify-center">
           
           <BoltIcon className="w-10 h-10 text-[#36a35e] ml-2 animate-pulse" />
@@ -104,7 +102,7 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
           <BoltIcon className="w-10 h-10 text-[#36a35e] ml-2 animate-pulse" />
         </h2>
 
-        {/* 🔥 Chat Interface */}
+        {}
         <div className="max-w-3xl mx-auto bg-base-100 p-6 shadow-xl rounded-xl border border-gray-700">
           <div
             className="h-96 overflow-y-auto p-3 border border-gray-500 rounded-lg bg-base-300 space-y-4"
@@ -120,11 +118,11 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
               >
-                {/* ✅ Show AI or User Icon */}
+                {}
                 {msg.type === "bot" && <BoltIcon className="w-8 h-8 text-primary" />}
                 {msg.type === "user" && <UserCircleIcon className="w-8 h-8 text-secondary" />}
 
-                {/* ✅ Dynamically Sized Chat Bubble */}
+                {}
                 <motion.div
                   className={`px-4 py-2 rounded-lg text-sm shadow-md max-w-xs md:max-w-sm lg:max-w-md ${
                     msg.type === "user"
@@ -145,10 +143,10 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
               </motion.div>
             ))}
 
-            {/* ✅ Auto-scroll target */}
+            {}
             <div ref={messagesEndRef} />
 
-            {/* 🟠 Show Spinner When AI is Thinking */}
+            {}
             {loading && (
               <motion.div className="flex justify-start">
                 <motion.div
@@ -163,7 +161,7 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
             )}
           </div>
 
-          {/* ✅ Input Field & Send Button */}
+          {}
           <div className="flex mt-4 space-x-2">
             <input
               type="text"
@@ -174,7 +172,7 @@ const Chatbot = ({ setRecommendations }: { setRecommendations: (recs: Recommenda
               disabled={loading}
             />
 
-            {/* ✈ Send Button */}
+            {}
             <motion.button
               className="btn bg-[#36a35e] text-white p-2 rounded-full hover:bg-[#2d8f52] transition"
               onClick={handleSendMessage}

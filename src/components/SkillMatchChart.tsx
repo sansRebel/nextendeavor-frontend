@@ -17,10 +17,9 @@ const SkillMatchChart: React.FC<SkillMatchChartProps> = ({ recommendation }) => 
     );
   }
 
-  // ✅ Generate randomized skill proficiency levels (Mock Data)
   const data = recommendation.requiredSkills.map((skill) => ({
     skill,
-    value: Math.floor(Math.random() * 5) + 5, // Range between 5 and 10 for realism
+    value: Math.floor(Math.random() * 5) + 5, 
   }));
 
   return (
@@ -39,7 +38,6 @@ const SkillMatchChart: React.FC<SkillMatchChartProps> = ({ recommendation }) => 
           <PolarRadiusAxis tick={{ fill: "gray" }} domain={[0, 10]} />
           <Tooltip />
           
-          {/* 🔵 Skill Coverage Radar */}
           <Radar name="Skill Coverage" dataKey="value" stroke="#36a35e" fill="#36a35e" fillOpacity={0.6} />
         </RadarChart>
       </ResponsiveContainer>
